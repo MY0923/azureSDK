@@ -13,7 +13,7 @@ async function main() {
     }
 
 
-    // Create the BlobServiceClient object which will be used to create a container client
+    // コンテナクライアント作成に使用するBlobServiceClientオブジェクト作成
     const blobServiceClient = BlobServiceClient.fromConnectionString(
         AZURE_STORAGE_CONNECTION_STRING
     );
@@ -36,14 +36,15 @@ async function main() {
 
 
     // blobに名前作成(uniqueにする)
-    const blobName = "quickstart" + uuidv1() + ".txt";
+    // const blobName = "quickstart" + uuidv1() + ".txt";
+    const blobName = "index.html";
 
     // blob clientを取得
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     console.log("\nUploading to Azure storage as blob:\n\t", blobName);
 
     // blobにデータをアップロード
-    const data = "./index.html";
+    const data = "index.html";
     const uploadBlobResponse = await blockBlobClient.upload(data, data.length);
     console.log(
         "Blob was uploaded successfully. requestId: ",
