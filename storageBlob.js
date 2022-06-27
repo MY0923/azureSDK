@@ -2,6 +2,9 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const { v1: uuidv1 } = require('uuid');
 require('dotenv').config()
 
+
+// type PublicAccessType = "container" | "blob"
+
 async function main() {
     console.log('Azure Blob storage v12 - JavaScript quickstart sample');
 
@@ -45,7 +48,7 @@ async function main() {
 
     // blobにデータをアップロード
     const data = "index.html";
-    const uploadBlobResponse = await blockBlobClient.upload(data, data.length);
+    const uploadBlobResponse = await blockBlobClient.uploadBlobResponse(data, data.length);
     console.log(
         "Blob was uploaded successfully. requestId: ",
         uploadBlobResponse.requestId
