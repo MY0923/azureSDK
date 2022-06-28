@@ -24,17 +24,28 @@ async function main() {
         AZURE_STORAGE_CONNECTION_STRING
     );
 
-    // コンテナの名前を作成(uniqueにする)
+    // コンテナの名前を作成(uniqueにする。小文字でしか作れない)
     // const containerName = "quickstart" + uuidv1();
-    const containerName = "testman1";
+    const containerName = "testman87";
+    
     console.log("\nCreating container...");
     console.log("\t", containerName);
 
     // コンテナの参照を取得
     const containerClient = blobServiceClient.getContainerClient(containerName);
+    
 
     // コンテナ作成
-    const createContainerResponse = await containerClient.create();
+    const publicAccessType = "blob";
+    // const containerOptions = {
+    //     ContainerProperties: {
+    //         publicAccess: publicAccessType,
+    //     }
+    // };
+    const containerOptions = {
+        access: publicAccessType,
+    }
+    const createContainerResponse = await containerClient.create(containerOptions);
     console.log(
         "Container was created successfully. requestId: ",
         createContainerResponse.requestId
