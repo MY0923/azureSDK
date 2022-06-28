@@ -1,6 +1,9 @@
 const { BlobServiceClient } = require('@azure/storage-blob');
 const { v1: uuidv1 } = require('uuid');
-require('dotenv').config()
+require('dotenv').config();
+const fs = require('fs');
+const mime = require("mime");
+
 
 
 // type PublicAccessType = "container" | "blob"
@@ -23,7 +26,7 @@ async function main() {
 
     // コンテナの名前を作成(uniqueにする)
     // const containerName = "quickstart" + uuidv1();
-    const containerName = "test1";
+    const containerName = "testman1";
     console.log("\nCreating container...");
     console.log("\t", containerName);
 
@@ -41,14 +44,20 @@ async function main() {
     // blobに名前作成(uniqueにする)
     // const blobName = "quickstart" + uuidv1() + ".txt";
     const blobName = "index.html";
+    const contentType = mime.getType(blobName);
+    const options = {
+        blobHTTPHeaders: {
+        blobContentType: contentType,
+        },
+    };
 
     // blob clientを取得
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     console.log("\nUploading to Azure storage as blob:\n\t", blobName);
 
     // blobにデータをアップロード
-    const data = "index.html";
-    const uploadBlobResponse = await blockBlobClient.uploadBlobResponse(data, data.length);
+    const data = fs.readFileSync('index.html', "utf-8");
+    const uploadBlobResponse = await blockBlobClient.upload(data, data.length, options);
     console.log(
         "Blob was uploaded successfully. requestId: ",
         uploadBlobResponse.requestId
