@@ -5,51 +5,32 @@ const fs = require('fs');
 const mime = require("mime");
 
 
-
-// type PublicAccessType = "container" | "blob"
-
 async function main() {
-    console.log('Azure Blob storage v12 - JavaScript quickstart sample');
 
-    // Azure storageにアクセスできるか確認(接続文字列を使う)
-    const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
-
-    if (!AZURE_STORAGE_CONNECTION_STRING) {
-        throw Error("Azure Storage Connection string not found");
-    }
-
+    // 接続文字列(キー)を代入
+    const AZURE_STORAGE_CONNECTION_STRING = storageCheck();
 
     // コンテナクライアント作成に使用するBlobServiceClientオブジェクト作成
-    const blobServiceClient = BlobServiceClient.fromConnectionString(
-        AZURE_STORAGE_CONNECTION_STRING
-    );
+    const blobServiceClient = blobServiceClientCreate(AZURE_STORAGE_CONNECTION_STRING);
 
     // コンテナの名前を作成(uniqueにする。小文字でしか作れない)
     // const containerName = "quickstart" + uuidv1();
-    const containerName = "testman87";
+    const containerName = "test6789012";
     
-    console.log("\nCreating container...");
+    console.log("\nコンテナ作成中");
     console.log("\t", containerName);
 
-    // コンテナの参照を取得
-    const containerClient = blobServiceClient.getContainerClient(containerName);
+    // コンテナクライアントを取得
+    const containerClient = getContainerClient(blobServiceClient, containerName);
     
 
     // コンテナ作成
-    const publicAccessType = "blob";
-    // const containerOptions = {
-    //     ContainerProperties: {
-    //         publicAccess: publicAccessType,
-    //     }
-    // };
+    // const publicAccessType = "blob";
     const containerOptions = {
-        access: publicAccessType,
+        access: "blob",
     }
-    const createContainerResponse = await containerClient.create(containerOptions);
-    console.log(
-        "Container was created successfully. requestId: ",
-        createContainerResponse.requestId
-    );
+    // const containerResponse = createContainerResponse(containerOptions, containerClient);
+    createContainerResponse(containerClient, containerOptions);
 
 
     // blobに名前作成(uniqueにする)
@@ -111,6 +92,28 @@ async function streamToText(readable) {
 // );
 
 
+// Azure storageにアクセスできるか確認(接続文字列を使う)
+function storageCheck(){
+    if (!process.env.ACCESS_KEY) {
+        throw Error("Azure Storage Connection string not found");
+    }
+    return process.env.ACCESS_KEY;
+}
+
+// コンテナクライアント作成に使用するBlobServiceClientオブジェクト作成
+function blobServiceClientCreate(accessKey){
+    return BlobServiceClient.fromConnectionString(accessKey);
+}
+
+// コンテナクライアントを取得
+function getContainerClient(blobServiceClient, containerName){
+    return blobServiceClient.getContainerClient(containerName);
+}
+
+//コンテナ作成(同じコンテナ名があると処理が失敗する)
+async function createContainerResponse(containerOptions, containerClient){
+    return await containerClient.create(containerOptions);
+}
 
 main()
     .then(() => console.log('Done'))
