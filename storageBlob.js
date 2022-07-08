@@ -73,7 +73,6 @@ async function createContainerResponse(containerClient) {
     const containerOptions = {
         access: "blob",
     }
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     return await containerClient.create(containerOptions);
 }
 
