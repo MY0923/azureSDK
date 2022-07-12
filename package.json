@@ -11,6 +11,7 @@
     "last 1 webkit version"
   ],
   "scripts": {
+    "ts-node": "ts-node",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel ./index.html"
   },
@@ -19,9 +20,16 @@
   "license": "ISC",
   "dependencies": {
     "@azure/storage-blob": "^12.10.0",
+    "@types/node": "^18.0.3",
     "dotenv": "^16.0.1",
     "fs": "^0.0.1-security",
     "mime": "^3.0.0",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/mime": "^2.0.3",
+    "@types/uuid": "^8.3.4"
   }
 }

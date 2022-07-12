@@ -1,8 +1,8 @@
-const { BlobServiceClient } = require('@azure/storage-blob');
-const { v1: uuidv1 } = require('uuid');
+import { BlobServiceClient } from '@azure/storage-blob';
+// import { v1 as uuidv1 } from 'uuid';
 require('dotenv').config();
-const fs = require('fs');
-const mime = require("mime");
+import * as fs from 'fs';
+import * as mime from "mime";
 
 
 async function main() {
@@ -15,7 +15,7 @@ async function main() {
 
     // コンテナの名前を作成(uniqueにする。小文字でしか作れない)
     // const containerName = "quickstart" + uuidv1();
-    const containerName = "aiueo";
+    const containerName = "nasubi";
 
     console.log("\nコンテナ作成中");
     console.log("\t", containerName);
@@ -48,8 +48,6 @@ async function main() {
 }
 
 
-
-
 // Azure storageにアクセスできるか確認(接続文字列を使う)
 function storageCheck() {
     if (!process.env.ACCESS_KEY) {
@@ -59,17 +57,18 @@ function storageCheck() {
 }
 
 // コンテナクライアント作成に使用するBlobServiceClientオブジェクト作成
-function blobServiceClientCreate(accessKey) {
+function blobServiceClientCreate(accessKey: string) {
     return BlobServiceClient.fromConnectionString(accessKey);
 }
 
 // コンテナクライアントを取得
-function getContainerClient(blobServiceClient, containerName) {
+function getContainerClient(blobServiceClient: any, containerName: string) {
+    console.log(blobServiceClient);
     return blobServiceClient.getContainerClient(containerName);
 }
 
 //コンテナ作成(同じコンテナ名があると処理が失敗する)
-async function createContainerResponse(containerClient) {
+async function createContainerResponse(containerClient: any) {
     const containerOptions = {
         access: "blob",
     }
@@ -77,12 +76,12 @@ async function createContainerResponse(containerClient) {
 }
 
 // blob clientを取得
-function getBlobClient(containerClient, blobName) {
+function getBlobClient(containerClient: any, blobName: string) {
     console.log("\nUploading to Azure storage as blob:\n\t", blobName);
     return containerClient.getBlockBlobClient(blobName);
 }
 
-async function blobFileUpload(blockBlobClient ,blobName, options){
+async function blobFileUpload(blockBlobClient: any, blobName: string, options: object){
     // blobにデータをアップロード
     const data = fs.readFileSync('index.html', "utf-8");
     return await blockBlobClient.upload(data, data.length, options);
